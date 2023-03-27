@@ -6,7 +6,7 @@ from minigrid.core.world_object import Goal, Lava, Wall
 from minigrid.minigrid_env import MiniGridEnv
 
 
-class SmallEnv(MiniGridEnv):
+class LargeEnv(MiniGridEnv):
 
     """
     ## Description
