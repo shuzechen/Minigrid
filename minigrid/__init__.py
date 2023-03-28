@@ -1128,3 +1128,22 @@ def register_minigrid_envs():
         id="BabyAI-BossLevelNoUnlock-v0",
         entry_point="minigrid.envs.babyai:BossLevelNoUnlock",
     )
+
+    # Delayed Rewbuffer
+    # ----------------- 
+
+    register(
+        id="small",
+        entry_point="minigrid.envs:SmallEnv",
+    )
+
+    register(
+        id="medium",
+        entry_point="minigrid.envs:MediumEnv",
+    )
+
+    register(
+        id="large",
+        entry_point="minigrid.envs:LargeEnv",
+    )
+    

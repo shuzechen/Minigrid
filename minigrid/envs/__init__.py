@@ -25,3 +25,6 @@ from minigrid.envs.putnear import PutNearEnv
 from minigrid.envs.redbluedoors import RedBlueDoorEnv
 from minigrid.envs.unlock import UnlockEnv
 from minigrid.envs.unlockpickup import UnlockPickupEnv
+from minigrid.envs.small import SmallEnv
+from minigrid.envs.medium import MediumEnv
+from minigrid.envs.large import LargeEnv

@@ -112,12 +112,12 @@ class LargeEnv(MiniGridEnv):
             self.grid.set(mid+3, i+1, Wall())
             self.grid.set(mid-3, i+1, Wall())
         for i in range(3):
-            self.grid.set(mid-8, i+4, Wall())
-            self.grid.set(mid+8, i+4, Wall())
+            self.grid.set(mid-8, i+7, Wall())
+            self.grid.set(mid+8, i+7, Wall())
         for i in range(5):
             self.grid.set(mid-8+i, 6, Wall())
-            self.grid.set(mid+3+i, 6, Wall())
-        for i in range(8):
+            self.grid.set(mid+4+i, 6, Wall())
+        for i in range(17):
             self.grid.set(mid-8+i, 10, Wall())
 
         # Place the agent
