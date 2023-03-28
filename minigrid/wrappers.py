@@ -125,6 +125,29 @@ class ActionBonus(gym.Wrapper):
         return obs, reward, terminated, truncated, info
 
 
+class DistoDesBouns(gym.Wrapper):
+    """
+    Reward = cur_dis - nxt_dis (L2-distance)
+    """
+    def __init__(self, env, env_id):
+        super().__init__(env)
+        self.env_id = env_id
+        self.goal_posx, self.goal_posy = env.goal_pos
+
+    def step(self, action):
+        env = self.unwrapped
+        cur_x, cur_y = env.agent_pos
+        cur_dis = math.sqrt((cur_x - self.goal_posx)**2 + (cur_y - self.goal_posy)**2)
+        obs, reward, terminated, truncated, info = self.env.step(action)
+        env = self.unwrapped
+        nxt_x, nxt_y = env.agent_pos
+        nxt_dis = math.sqrt((nxt_x - self.goal_posx)**2 + (nxt_y - self.goal_posy)**2)
+        reward += cur_dis - nxt_dis
+
+        return obs, reward, terminated, truncated, info
+
+
+
 class PositionBonus(Wrapper):
     """
     Adds an exploration bonus based on which positions

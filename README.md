@@ -9,6 +9,17 @@
   <img src="figures/door-key-curriculum.gif" width=200 alt="Figure Door Key Curriculum">
 </p>
 
+# The LocalOPT
+1. Add 3 maps : Small, Medium, Large
+   The corresponding --env-id is "small", "medium", "large"
+2. Add 2 reward type : 0, 1
+   The corresponding --reward-type is "0", "1"
+   where 0 means the reward is always `0` unless `goal_pos` is arrived and get `1`
+   and 1 means the reward is `cur_distogoal-nxt_distogoal`
+3. To change the parser, see `Manual_control.py`
+4. It works as expected with manual_control. 
+
+
 The Minigrid library contains a collection of discrete grid-world environments to conduct research on Reinforcement Learning. The environments follow the [Gymnasium]() standard API and they are designed to be lightweight, fast, and easily customizable. 
 
 The documentation website is at [minigrid.farama.org](https://minigrid.farama.org/), and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/B8ZJ92hu](https://discord.gg/B8ZJ92hu)
@@ -60,3 +71,6 @@ If using the `BabyAI` environments please also cite the following:
   year={2018}
 }
 ```
+
+
+

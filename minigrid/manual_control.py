@@ -8,7 +8,7 @@ from gymnasium import Env
 
 from minigrid.core.actions import Actions
 from minigrid.minigrid_env import MiniGridEnv
-from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper
+from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper, DistoDesBouns
 
 
 class ManualControl:
@@ -118,6 +118,13 @@ if __name__ == "__main__":
         help="set the resolution for pygame rendering (width and height)",
     )
 
+    parser.add_argument(
+        "--reward_type",
+        type=int,
+        default=0,
+        help="set the reward type for the environment, 0 means 0-1; 1 means distance to goal",
+    )
+
     args = parser.parse_args()
 
     env: MiniGridEnv = gym.make(
@@ -134,6 +141,10 @@ if __name__ == "__main__":
         print("Using agent view")
         env = RGBImgPartialObsWrapper(env, args.tile_size)
         env = ImgObsWrapper(env)
+
+    if args.reward_type == 1:
+        print("Using distance reward")
+        env = DistoDesBouns(env, args.env_id)
 
     manual_control = ManualControl(env, seed=args.seed)
     manual_control.start()
