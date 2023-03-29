@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Goal, Lava, Wall
@@ -51,8 +53,7 @@ class LocalOPTEnv(MiniGridEnv):
 
     ## Registered Configurations
 
-    - `MiniGrid-DistShift1-v0`
-    - `MiniGrid-DistShift2-v0`
+    - `MiniGrid-LocalOPT-v0`
 
     """
 
@@ -63,11 +64,28 @@ class LocalOPTEnv(MiniGridEnv):
         agent_start_pos=(3, 1),
         agent_start_dir=1,
         max_steps: int | None = None,
+        map_size = "small",
+        reward_type = "sparse",
         **kwargs,
     ):
-        self.agent_start_pos = agent_start_pos
-        self.agent_start_dir = agent_start_dir
-        self.goal_pos = (width - 4, 1)
+        self.size = map_size
+        self.reward_type = reward_type
+        if self.size == "small":
+            self.agent_start_pos = agent_start_pos
+            self.agent_start_dir = agent_start_dir
+            self.goal_pos = (width - 4, 1)
+        elif self.size == "medium":
+            width = 18
+            height = 12
+            self.agent_start_pos = (5, 2)
+            self.agent_start_dir = 1
+            self.goal_pos = (width - 6, 2)
+        elif self.size == "large":
+            width = 25
+            height = 16
+            self.agent_start_pos = (6, 3)
+            self.agent_start_dir = 1
+            self.goal_pos = (width - 7, 3)
         # self.strip2_row = strip2_row
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
@@ -99,13 +117,44 @@ class LocalOPTEnv(MiniGridEnv):
         # Place a goal square in the bottom-right corner
         self.put_obj(Goal(), *self.goal_pos)
 
-        # Place the wall
-        for i in range(width-6):
-            self.grid.set(i+3, 3, Wall())
-        for i in range(height-5):
-            self.grid.set(width//2, i+1, Wall())
+        if self.size == "small":
+            # Place the wall
+            for i in range(width-6):
+                self.grid.set(i+3, 3, Wall())
+            for i in range(height-5):
+                self.grid.set(width//2, i+1, Wall())
+        elif self.size == "medium":
+            # Place the wall
+            mid = width // 2 # 9
+            #mid+1, mid-2, mid-5, mid+4
+            for i in range(4):
+                self.grid.set(mid+1, i+1, Wall())
+                self.grid.set(mid-2, i+1, Wall())
+                self.grid.set(mid-5, i+4, Wall())
+                self.grid.set(mid+4, i+4, Wall())
+            for i in range(2):
+                self.grid.set(mid-4+i, 4, Wall())
+                self.grid.set(mid+2+i, 4, Wall())
+            for i in range(8):
+                self.grid.set(mid-4+i, 7, Wall())
+        elif self.size == "large":
+            # Place the wall
+            mid = width // 2 # 12
+            #mid+1, mid-2, mid-5, mid+4
+            for i in range(6):
+                self.grid.set(mid+3, i+1, Wall())
+                self.grid.set(mid-3, i+1, Wall())
+            for i in range(3):
+                self.grid.set(mid-8, i+7, Wall())
+                self.grid.set(mid+8, i+7, Wall())
+            for i in range(5):
+                self.grid.set(mid-8+i, 6, Wall())
+                self.grid.set(mid+4+i, 6, Wall())
+            for i in range(17):
+                self.grid.set(mid-8+i, 10, Wall())
 
-        # Place the agent
+
+            # Place the agent
         if self.agent_start_pos is not None:
             self.agent_pos = self.agent_start_pos
             self.agent_dir = self.agent_start_dir
@@ -113,3 +162,28 @@ class LocalOPTEnv(MiniGridEnv):
             self.place_agent()
 
         self.mission = "get to the green goal square"
+    
+    def _reward(self) -> float:
+        return 1
+    
+    def step(self, action):
+        if self.reward_type == "sparse":
+            obs, reward, done, info, temp_dict = super().step(action)
+        elif self.reward_type == "dense":
+            goal_posx, goal_posy = self.goal_pos
+            cur_x, cur_y = self.agent_pos
+            cur_dis = abs(cur_x - goal_posx) + abs(cur_y - goal_posy)
+            obs, reward, done, info, temp_dict = super().step(action)
+            nxt_x, nxt_y = self.agent_pos
+            nxt_dis = abs(nxt_x - goal_posx) + abs(nxt_y - goal_posy)
+            reward += cur_dis - nxt_dis
+        elif self.reward_type == "dense-L2":
+            goal_posx, goal_posy = self.goal_pos
+            cur_x, cur_y = self.agent_pos
+            cur_dis = math.sqrt((cur_x - goal_posx)**2 + (cur_y - goal_posy)**2)
+            obs, reward, done, info, temp_dict = super().step(action)
+            nxt_x, nxt_y = self.agent_pos
+            nxt_dis = math.sqrt((nxt_x - goal_posx)**2 + (nxt_y - goal_posy)**2)
+            reward += cur_dis - nxt_dis
+
+        return obs, reward, done, info, temp_dict                

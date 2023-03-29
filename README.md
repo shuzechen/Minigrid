@@ -11,12 +11,16 @@
 
 # The LocalOPT
 1. Add 3 maps : Small, Medium, Large
-   The corresponding --env-id is "small", "medium", "large"
-2. Add 2 reward type : 0, 1
-   The corresponding --reward-type is "0", "1"
-   where 0 means the reward is always `0` unless `goal_pos` is arrived and get `1`
-   and 1 means the reward is `cur_distogoal-nxt_distogoal`
+   - The corresponding `--env-id` is `MiniGrid-LocalOPT-v0`
+   - The default map is `small`
+   - To change the map size, use `--map-size small/medium/large`
+2. Add 3 reward type : sparse, dense, dense-L2
+   - The default reward type is `sparse`
+   - To change the reward type, use `--reward-type sparse/dense/dense-L2`
+     - `dense` is `L1(cur_dis_to_goal)-L1(nxt_dis_to_goal)`
+     - `dense-L2` is `L2(cur_dis_to_goal)-L2(nxt_dis_to_goal)`
 3. To change the parser, see `Manual_control.py`
+   - The format should be like `env = gym.make(env_id, map_size=args.map_size, reward_type=args.reward_type))`
 4. It works as expected with manual_control. 
 
 

@@ -119,6 +119,13 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "--map-size",
+        type=str,
+        default="small",
+        help="set the resolution for pygame rendering (width and height)",
+    )
+
+    parser.add_argument(
         "--reward-type",
         type=str,
         default="sparse",
@@ -134,6 +141,8 @@ if __name__ == "__main__":
         agent_pov=args.agent_view,
         agent_view_size=args.agent_view_size,
         screen_size=args.screen_size,
+        map_size=args.map_size,
+        reward_type=args.reward_type,
     )
 
     # TODO: check if this can be removed
@@ -141,13 +150,14 @@ if __name__ == "__main__":
         print("Using agent view")
         env = RGBImgPartialObsWrapper(env, args.tile_size)
         env = ImgObsWrapper(env)
-
+    '''
     if args.reward_type == "dense":
         print("Using distance reward")
         env = DistoDesBounsL1(env, args.env_id)
     elif args.reward_type == "dense_L2":
         print("Using L2 distance reward")
         env = DistoDesBounsL2(env, args.env_id)
+    '''
 
     manual_control = ManualControl(env, seed=args.seed)
     manual_control.start()
