@@ -6,12 +6,12 @@ from minigrid.core.world_object import Goal, Lava, Wall
 from minigrid.minigrid_env import MiniGridEnv
 
 
-class LargeEnv(MiniGridEnv):
+class LocalOPTEnv(MiniGridEnv):
 
     """
     ## Description
 
-    Large map for LocalOPT test
+    Maps for LocalOPT test
 
     ## Mission Space
 
@@ -58,16 +58,16 @@ class LargeEnv(MiniGridEnv):
 
     def __init__(
         self,
-        width=25,
-        height=16,
-        agent_start_pos=(6, 3),
+        width=11,
+        height=7,
+        agent_start_pos=(3, 1),
         agent_start_dir=1,
         max_steps: int | None = None,
         **kwargs,
     ):
         self.agent_start_pos = agent_start_pos
         self.agent_start_dir = agent_start_dir
-        self.goal_pos = (width - 7, 3)
+        self.goal_pos = (width - 4, 1)
         # self.strip2_row = strip2_row
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
@@ -100,19 +100,10 @@ class LargeEnv(MiniGridEnv):
         self.put_obj(Goal(), *self.goal_pos)
 
         # Place the wall
-        mid = width // 2 # 12
-        #mid+1, mid-2, mid-5, mid+4
-        for i in range(6):
-            self.grid.set(mid+3, i+1, Wall())
-            self.grid.set(mid-3, i+1, Wall())
-        for i in range(3):
-            self.grid.set(mid-8, i+7, Wall())
-            self.grid.set(mid+8, i+7, Wall())
-        for i in range(5):
-            self.grid.set(mid-8+i, 6, Wall())
-            self.grid.set(mid+4+i, 6, Wall())
-        for i in range(17):
-            self.grid.set(mid-8+i, 10, Wall())
+        for i in range(width-6):
+            self.grid.set(i+3, 3, Wall())
+        for i in range(height-5):
+            self.grid.set(width//2, i+1, Wall())
 
         # Place the agent
         if self.agent_start_pos is not None:
@@ -122,6 +113,3 @@ class LargeEnv(MiniGridEnv):
             self.place_agent()
 
         self.mission = "get to the green goal square"
-
-    def _reward(self) -> float:
-        return 1

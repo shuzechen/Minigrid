@@ -125,7 +125,7 @@ class ActionBonus(gym.Wrapper):
         return obs, reward, terminated, truncated, info
 
 
-class DistoDesBouns(gym.Wrapper):
+class DistoDesBounsL2(gym.Wrapper):
     """
     Reward = cur_dis - nxt_dis (L2-distance)
     """
@@ -146,6 +146,26 @@ class DistoDesBouns(gym.Wrapper):
 
         return obs, reward, terminated, truncated, info
 
+class DistoDesBounsL1(gym.Wrapper):
+    """
+    Reward = cur_dis - nxt_dis (L2-distance)
+    """
+    def __init__(self, env, env_id):
+        super().__init__(env)
+        self.env_id = env_id
+        self.goal_posx, self.goal_posy = env.goal_pos
+
+    def step(self, action):
+        env = self.unwrapped
+        cur_x, cur_y = env.agent_pos
+        cur_dis = abs(cur_x - self.goal_posx) + abs(cur_y - self.goal_posy)
+        obs, reward, terminated, truncated, info = self.env.step(action)
+        env = self.unwrapped
+        nxt_x, nxt_y = env.agent_pos
+        nxt_dis = abs(nxt_x - self.goal_posx) + abs(nxt_y - self.goal_posy)
+        reward += cur_dis - nxt_dis
+
+        return obs, reward, terminated, truncated, info
 
 
 class PositionBonus(Wrapper):

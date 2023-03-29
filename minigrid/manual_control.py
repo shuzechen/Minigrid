@@ -8,7 +8,7 @@ from gymnasium import Env
 
 from minigrid.core.actions import Actions
 from minigrid.minigrid_env import MiniGridEnv
-from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper, DistoDesBouns
+from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper, DistoDesBounsL1, DistoDesBounsL2
 
 
 class ManualControl:
@@ -119,10 +119,10 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--reward_type",
-        type=int,
-        default=0,
-        help="set the reward type for the environment, 0 means 0-1; 1 means distance to goal",
+        "--reward-type",
+        type=str,
+        default="sparse",
+        help="set the reward type for the environment, sparse means 0-1;  dense means distance to goal; dense_L2 means L2 distance to goal",
     )
 
     args = parser.parse_args()
@@ -142,9 +142,12 @@ if __name__ == "__main__":
         env = RGBImgPartialObsWrapper(env, args.tile_size)
         env = ImgObsWrapper(env)
 
-    if args.reward_type == 1:
+    if args.reward_type == "dense":
         print("Using distance reward")
-        env = DistoDesBouns(env, args.env_id)
+        env = DistoDesBounsL1(env, args.env_id)
+    elif args.reward_type == "dense_L2":
+        print("Using L2 distance reward")
+        env = DistoDesBounsL2(env, args.env_id)
 
     manual_control = ManualControl(env, seed=args.seed)
     manual_control.start()

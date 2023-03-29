@@ -1133,17 +1133,17 @@ def register_minigrid_envs():
     # ----------------- 
 
     register(
-        id="small",
+        id="MiniGrid-LocalOPT-v0",
         entry_point="minigrid.envs:SmallEnv",
     )
 
     register(
-        id="medium",
+        id="MiniGrid-LocalOPT-v1",
         entry_point="minigrid.envs:MediumEnv",
     )
 
     register(
-        id="large",
+        id="MiniGrid-LocalOPT-v2",
         entry_point="minigrid.envs:LargeEnv",
     )
     
