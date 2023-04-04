@@ -121,7 +121,7 @@ class MiniGridEnv(gym.Env):
         *,
         seed: int | None = None,
         options: dict[str, Any] | None = None,
-    ) -> tuple[ObsType, dict[str, Any]]:
+    ) -> np.ndarray:
         super().reset(seed=seed)
 
         # Reinitialize episode-specific variables
@@ -154,7 +154,7 @@ class MiniGridEnv(gym.Env):
         # Return first observation
         obs = self.gen_obs()
 
-        return obs, {}
+        return obs["image"]
 
     def hash(self, size=16):
         """Compute a hash that uniquely identifies the current state of the environment.
@@ -516,12 +516,12 @@ class MiniGridEnv(gym.Env):
 
     def step(
         self, action: ActType
-    ) -> tuple[ObsType, SupportsFloat, bool, bool, dict[str, Any]]:
+    ) -> tuple[np.ndarray, SupportsFloat, bool, dict[str, Any]]:
         self.step_count += 1
 
         reward = 0
         terminated = False
-        truncated = False
+        # truncated = False
 
         # Get the position in front of the agent
         fwd_pos = self.front_pos
@@ -576,15 +576,15 @@ class MiniGridEnv(gym.Env):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-        if self.step_count >= self.max_steps:
-            truncated = True
+        # if self.step_count >= self.max_steps:
+            # truncated = True
 
         if self.render_mode == "human":
             self.render()
 
         obs = self.gen_obs()
 
-        return obs, reward, terminated, truncated, {}
+        return obs, reward, terminated, {}
 
     def gen_obs_grid(self, agent_view_size=None):
         """

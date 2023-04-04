@@ -168,12 +168,12 @@ class LocalOPTEnv(MiniGridEnv):
     
     def step(self, action):
         if self.reward_type == "sparse":
-            obs, reward, done, info, temp_dict = super().step(action)
+            obs, reward, done, info = super().step(action)
         elif self.reward_type == "dense":
             goal_posx, goal_posy = self.goal_pos
             cur_x, cur_y = self.agent_pos
             cur_dis = abs(cur_x - goal_posx) + abs(cur_y - goal_posy)
-            obs, reward, done, info, temp_dict = super().step(action)
+            obs, reward, done, info = super().step(action)
             nxt_x, nxt_y = self.agent_pos
             nxt_dis = abs(nxt_x - goal_posx) + abs(nxt_y - goal_posy)
             reward += cur_dis - nxt_dis
@@ -181,9 +181,9 @@ class LocalOPTEnv(MiniGridEnv):
             goal_posx, goal_posy = self.goal_pos
             cur_x, cur_y = self.agent_pos
             cur_dis = math.sqrt((cur_x - goal_posx)**2 + (cur_y - goal_posy)**2)
-            obs, reward, done, info, temp_dict = super().step(action)
+            obs, reward, done, info = super().step(action)
             nxt_x, nxt_y = self.agent_pos
             nxt_dis = math.sqrt((nxt_x - goal_posx)**2 + (nxt_y - goal_posy)**2)
             reward += cur_dis - nxt_dis
 
-        return obs, reward, done, info, temp_dict                
+        return obs, reward, done, info               
