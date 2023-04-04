@@ -575,8 +575,8 @@ class MiniGridEnv(gym.Env):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-        # if self.step_count >= self.max_steps:
-            # truncated = True
+        if self.step_count >= self.max_steps:
+            terminated = True
 
         if self.render_mode == "human":
             self.render()
