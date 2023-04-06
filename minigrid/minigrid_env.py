@@ -116,6 +116,9 @@ class MiniGridEnv(gym.Env):
         self.tile_size = tile_size
         self.agent_pov = agent_pov
 
+    def seed(self, seed: int | None = None):
+        super().reset(seed=seed)
+
     def reset(
         self,
         *,
