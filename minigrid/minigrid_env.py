@@ -154,7 +154,7 @@ class MiniGridEnv(gym.Env):
         # Return first observation
         obs = self.gen_obs()
 
-        return obs["image"]
+        return obs
 
     def hash(self, size=16):
         """Compute a hash that uniquely identifies the current state of the environment.
@@ -574,16 +574,19 @@ class MiniGridEnv(gym.Env):
 
         else:
             raise ValueError(f"Unknown action: {action}")
+        
+        info = {}
 
         if self.step_count >= self.max_steps:
             terminated = True
+            info = {'TimeLimit.truncated': True}
 
         if self.render_mode == "human":
             self.render()
 
         obs = self.gen_obs()
 
-        return obs, reward, terminated, {}
+        return obs, reward, terminated, info
 
     def gen_obs_grid(self, agent_view_size=None):
         """
