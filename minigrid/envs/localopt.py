@@ -109,6 +109,25 @@ class LocalOPTEnv(MiniGridEnv):
             **kwargs,
         )
 
+    def gen_obs(self):
+        """
+        Generate the agent's view (fully observable, low-resolution encoding)
+        """
+         
+        # Get the fully observable states
+        grid = self.grid
+
+        # Encode the fully observable view into a numpy array
+        image = grid.encode(None)
+
+        # Observations are dictionaries containing:
+        # - an image (partially observable view of the environment)
+        # - the agent's direction/orientation (acting as a compass)
+        # - a textual mission string (instructions for the agent)
+        obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
+
+        return obs
+
     @staticmethod
     def _gen_mission():
         return "get to the green goal square"
