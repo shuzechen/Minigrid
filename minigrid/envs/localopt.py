@@ -124,7 +124,7 @@ class LocalOPTEnv(MiniGridEnv):
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
         # - a textual mission string (instructions for the agent)
-        obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
+        obs = {"image": image, "direction": self.agent_dir} # , "mission": self.mission}
 
         return obs
 

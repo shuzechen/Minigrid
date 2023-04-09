@@ -78,7 +78,7 @@ class MiniGridEnv(gym.Env):
         self.observation_space = spaces.Dict(
             {
                 "image": image_observation_space,
-                # "direction": spaces.Discrete(4),
+                "direction": spaces.Discrete(4),
                 # "mission": mission_space,
             }
         )
