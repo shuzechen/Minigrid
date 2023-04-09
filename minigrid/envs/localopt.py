@@ -119,7 +119,7 @@ class LocalOPTEnv(MiniGridEnv):
 
         # Encode the fully observable view into a numpy array
         image = grid.encode(None)
-        image[self.agent_pos[0], self.agent_pos[1]] = True
+        image[self.agent_pos[0], self.agent_pos[1]] = 10 # Agent idx
 
         # Observations are dictionaries containing:
         # - an image (partially observable view of the environment)
