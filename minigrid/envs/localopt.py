@@ -70,7 +70,7 @@ class LocalOPTEnv(MiniGridEnv):
     ):
         self.size = map_size
         self.reward_type = reward_type
-        if self.size == "small":
+        if self.size == "small": # OPT = 4.19
             self.agent_start_pos = agent_start_pos
             self.agent_start_dir = agent_start_dir
             self.goal_pos = (width - 4, 1)
@@ -86,7 +86,13 @@ class LocalOPTEnv(MiniGridEnv):
             self.agent_start_pos = (6, 3)
             self.agent_start_dir = 1
             self.goal_pos = (width - 7, 3)
-        # self.strip2_row = strip2_row
+        elif self.size == "mini":
+            width = 5
+            height = 5
+            self.agent_start_pos = (1, 1)
+            self.agent_start_dir = 1
+            self.goal_pos = (3, 1)
+        # OPT = 2.8229751097999998
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
@@ -152,6 +158,10 @@ class LocalOPTEnv(MiniGridEnv):
                 self.grid.set(mid+4+i, 6, Wall())
             for i in range(17):
                 self.grid.set(mid-8+i, 10, Wall())
+        elif self.size == "mini":
+            # Place the wall
+            self.grid.set(2, 1, Wall())
+            self.grid.set(2, 2, Wall())
 
 
             # Place the agent
