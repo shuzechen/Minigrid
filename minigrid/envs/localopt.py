@@ -119,12 +119,13 @@ class LocalOPTEnv(MiniGridEnv):
 
         # Encode the fully observable view into a numpy array
         image = grid.encode(None)
+        image[self.agent_pos[0], self.agent_pos[1]] = True
 
         # Observations are dictionaries containing:
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
         # - a textual mission string (instructions for the agent)
-        obs = {"image": image, "direction": self.agent_dir} # , "mission": self.mission}
+        obs = {"image": image, "direction": self.agent_dir, "position": self.agent_pos} # , "mission": self.mission}
 
         return obs
 
