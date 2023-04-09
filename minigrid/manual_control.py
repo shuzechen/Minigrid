@@ -35,14 +35,11 @@ class ManualControl:
                     self.key_handler(event)
 
     def step(self, action: Actions):
-        _, reward, terminated, truncated, _ = self.env.step(action)
+        _, reward, terminated,  _ = self.env.step(action)
         print(f"step={self.env.step_count}, reward={reward:.2f}")
 
         if terminated:
             print("terminated!")
-            self.reset(self.seed)
-        elif truncated:
-            print("truncated!")
             self.reset(self.seed)
         else:
             self.env.render()
