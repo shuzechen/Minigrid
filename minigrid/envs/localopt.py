@@ -70,7 +70,7 @@ class LocalOPTEnv(MiniGridEnv):
     ):
         self.size = map_size
         self.reward_type = reward_type
-        if self.size == "small":
+        if self.size == "small": # OPT = 4.19
             self.agent_start_pos = agent_start_pos
             self.agent_start_dir = agent_start_dir
             self.goal_pos = (width - 4, 1)
