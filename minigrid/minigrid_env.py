@@ -79,7 +79,7 @@ class MiniGridEnv(gym.Env):
             {
                 "image": image_observation_space,
                 "direction": spaces.Discrete(4),
-                "position": spaces.Box(low=-1.0, high=100.0, shape=(2))
+                "position": spaces.Box(low=-1.0, high=100.0, shape=(2,))
                 # "mission": mission_space,
             }
         )

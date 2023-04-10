@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
+
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Goal, Lava, Wall
 from minigrid.minigrid_env import MiniGridEnv
+from gymnasium import spaces
 
 
 class LocalOPTEnv(MiniGridEnv):
@@ -108,6 +111,25 @@ class LocalOPTEnv(MiniGridEnv):
             max_steps=max_steps,
             **kwargs,
         )
+        image_observation_space = spaces.Box(
+            low=0,
+            high=255,
+            shape=(width, height),
+            dtype="uint8",
+        )
+        self.observation_space = spaces.Dict(
+            {
+                "image": image_observation_space,
+                "direction": spaces.Box(low=-1, high=5, shape=()),
+                "position": spaces.Box(low=-1.0, high=100.0, shape=(2,))
+                # "mission": mission_space,
+            }
+        )
+        self._grid_type = np.zeros((11,), dtype=np.int8)
+        self._grid_type[1] = 1
+        self._grid_type[2] = 2
+        self._grid_type[8] = 3
+        self._grid_type[10] = 4
 
     def gen_obs(self):
         """
@@ -120,12 +142,16 @@ class LocalOPTEnv(MiniGridEnv):
         # Encode the fully observable view into a numpy array
         image = grid.encode(None)
         image[self.agent_pos[0], self.agent_pos[1]] = 10 # Agent idx
+        image = self._grid_type[image[..., 0]]
+
+        direction = np.array(self.agent_dir)
+        position = np.array(self.agent_pos)
 
         # Observations are dictionaries containing:
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
         # - a textual mission string (instructions for the agent)
-        obs = {"image": image, "direction": self.agent_dir, "position": self.agent_pos} # , "mission": self.mission}
+        obs = {"image": image, "direction": direction, "position": position} # , "mission": self.mission}
 
         return obs
 
