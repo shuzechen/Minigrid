@@ -78,7 +78,8 @@ class MiniGridEnv(gym.Env):
         self.observation_space = spaces.Dict(
             {
                 "image": image_observation_space,
-                # "direction": spaces.Discrete(4),
+                "direction": spaces.Discrete(4),
+                "position": spaces.Box(low=-1.0, high=100.0, shape=(2,))
                 # "mission": mission_space,
             }
         )
@@ -642,8 +643,8 @@ class MiniGridEnv(gym.Env):
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
         # - a textual mission string (instructions for the agent)
-        # obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
-        obs = {"image": image}
+        obs = {"image": image, "direction": self.agent_dir} # , "mission": self.mission}
+        # obs = {"image": image}
 
         return obs
 
