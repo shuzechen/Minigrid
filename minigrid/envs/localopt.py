@@ -85,10 +85,10 @@ class LocalOPTEnv(MiniGridEnv):
             self.goal_pos = (width - 10, 2)
         elif self.size == "large":
             width = 25
-            height = 16
-            self.agent_start_pos = (6, 3)
+            height = 14
+            self.agent_start_pos = (11, 3)
             self.agent_start_dir = 1
-            self.goal_pos = (width - 7, 3)
+            self.goal_pos = (width - 12, 3)
         elif self.size == "mini":
             width = 5
             height = 5
@@ -194,16 +194,16 @@ class LocalOPTEnv(MiniGridEnv):
             mid = width // 2 # 12
             #mid+1, mid-2, mid-5, mid+4
             for i in range(6):
-                self.grid.set(mid+3, i+1, Wall())
-                self.grid.set(mid-3, i+1, Wall())
+                self.grid.set(mid, i+1, Wall())
+                #self.grid.set(mid-3, i+1, Wall())
             for i in range(3):
-                self.grid.set(mid-8, i+7, Wall())
-                self.grid.set(mid+8, i+7, Wall())
-            for i in range(5):
-                self.grid.set(mid-8+i, 6, Wall())
-                self.grid.set(mid+4+i, 6, Wall())
-            for i in range(17):
-                self.grid.set(mid-8+i, 10, Wall())
+                self.grid.set(mid-9, i+7, Wall())
+                self.grid.set(mid+9, i+7, Wall())
+            for i in range(9):
+                self.grid.set(mid-9+i, 6, Wall())
+                self.grid.set(mid+1+i, 6, Wall())
+            for i in range(19):
+                self.grid.set(mid-9+i, 10, Wall())
         elif self.size == "mini":
             # Place the wall
             self.grid.set(2, 1, Wall())
