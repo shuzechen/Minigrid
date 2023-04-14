@@ -107,7 +107,7 @@ class LocalOPTEnv(MiniGridEnv):
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
         if max_steps is None:
-            max_steps = 4 * width * height
+            max_steps = width * height
 
         super().__init__(
             mission_space=mission_space,
@@ -263,7 +263,7 @@ class LocalOPTEnv(MiniGridEnv):
         self.mission = "get to the green goal square"
     
     def _reward(self) -> float:
-        return 1
+        return super()._reward() * 4
     
     def step(self, action):
         if self.reward_type == "sparse":
