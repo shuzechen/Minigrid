@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 
 import numpy as np
+import random
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
@@ -44,7 +45,7 @@ class LocalOPTEnv(MiniGridEnv):
 
     ## Rewards
 
-    A reward of '1 - 0.9 * (step_count / max_steps)' is given for success, and '0' for failure.
+    A reward of '1' is given for success, and '0' for failure.
 
     ## Termination
 
@@ -69,32 +70,38 @@ class LocalOPTEnv(MiniGridEnv):
         max_steps: int | None = None,
         map_size = "small",
         reward_type = "sparse",
+        goal_var =  1,
         **kwargs,
     ):
         self.size = map_size
         self.reward_type = reward_type
+        self.goal_var = goal_var
         if self.size == "small": # OPT = 4.19
             self.agent_start_pos = agent_start_pos
             self.agent_start_dir = agent_start_dir
             self.goal_pos = (width - 4, 1)
-        elif self.size == "medium":
+            self.raw_goal_pos = self.goal_pos
+        elif self.size == "medium": # OPt = 1.15
             width = 22
             height = 8
             self.agent_start_pos = (9, 2)
             self.agent_start_dir = 1
             self.goal_pos = (width - 10, 2)
+            self.raw_goal_pos = self.goal_pos
         elif self.size == "large":
             width = 25
             height = 14
             self.agent_start_pos = (11, 3)
             self.agent_start_dir = 1
             self.goal_pos = (width - 12, 3)
+            self.raw_goal_pos = self.goal_pos
         elif self.size == "mini":
             width = 5
             height = 5
             self.agent_start_pos = (1, 1)
             self.agent_start_dir = 1
             self.goal_pos = (3, 1)
+            self.raw_goal_pos = self.goal_pos
         # OPT = 2.8229751097999998
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
@@ -166,7 +173,42 @@ class LocalOPTEnv(MiniGridEnv):
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
 
+
+        self.goal_pos = self.raw_goal_pos
         # Place a goal square in the bottom-right corner
+        if self.goal_var == 1:
+            pass
+        elif self.goal_var == 2:
+            ridx = random.randint(0, 3)
+            if ridx == 1:
+                self.goal_pos = (self.goal_pos[0] + 1, self.goal_pos[1])
+            elif ridx == 2:
+                self.goal_pos = (self.goal_pos[0], self.goal_pos[1]+1)
+            elif ridx == 3:
+                self.goal_pos = (self.goal_pos[0] + 1, self.goal_pos[1]+1)
+        elif self.goal_var == 3:
+            if self.size == "small":
+                raise NotImplementedError
+            ridx = random.randint(0, 8)
+            if ridx == 1:
+                self.goal_pos = (self.goal_pos[0] + 1, self.goal_pos[1])
+            elif ridx == 2:
+                self.goal_pos = (self.goal_pos[0], self.goal_pos[1]+1)
+            elif ridx == 3:
+                self.goal_pos = (self.goal_pos[0] + 1, self.goal_pos[1]+1)
+            elif ridx == 4:
+                self.goal_pos = (self.goal_pos[0] + 2, self.goal_pos[1])
+            elif ridx == 5:
+                self.goal_pos = (self.goal_pos[0]+2, self.goal_pos[1]+1)
+            elif ridx == 6:
+                self.goal_pos = (self.goal_pos[0], self.goal_pos[1]-1)
+            elif ridx == 7:
+                self.goal_pos = (self.goal_pos[0]+1, self.goal_pos[1]-1)
+            elif ridx == 8:
+                self.goal_pos = (self.goal_pos[0]+2, self.goal_pos[1]-1)
+        else:
+            raise NotImplementedError
+         
         self.put_obj(Goal(), *self.goal_pos)
 
         if self.size == "small":

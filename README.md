@@ -22,6 +22,13 @@
 3. To change the parser, see `Manual_control.py`
    - The format should be like `env = gym.make(env_id, map_size=args.map_size, reward_type=args.reward_type))`
 4. It works as expected with manual_control. 
+### 0414 Update
+1. Support variation goal by a new keyword `--goal_var`
+   - The default is `--goal_var=1`, which is no variation
+   - `--goal_var=2` means the goal is randomly selected from the 2X2 grid
+   - `--goal_var=3` means the goal is randomly selected from the 3X3 grid
+
+
 
 # jaxrl2 Problem
 Minigrid is originally written under the standard og gym 0.26(gymnasium 0.24), which is greatly different from the current version of gym 0.24. As a result, many codes in original MiniGrid are changed.  

@@ -1152,6 +1152,6 @@ def register_minigrid_envs():
     register(
         id="MiniGrid-LocalOPT-v0",
         entry_point="minigrid.envs:LocalOPTEnv",
-        kwargs={"map_size": "small", "reward_type": "sparse"},
+        kwargs={"goal_var": 1, "map_size": "small", "reward_type": "sparse"},
     )
     
